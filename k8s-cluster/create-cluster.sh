@@ -11,6 +11,7 @@ kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/confi
 TOTAL_PODS_LB=$(kubectl get pods --namespace metallb-system -l component=controller -o json | jq -r ".items | length")
 while [ $TOTAL_PODS_LB -eq 0 ]
 do
+    sleep 5
     TOTAL_PODS_LB=$(kubectl get pods --namespace metallb-system -l component=controller -o json | jq -r ".items | length")
 done
 
