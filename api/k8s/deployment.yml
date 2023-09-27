@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+spec:
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+      - name: api
+        image: api:2.0.0
+        imagePullPolicy: Never
+        resources:
+          limits:
+            memory: "500M"
+            cpu: 1.5
+        ports:
+        - containerPort: 8097
+        readinessProbe:
+          httpGet:
+            path: /health/readiness
+            port: 8097
+          initialDelaySeconds: 5
+          periodSeconds: 1
+        livenessProbe:
+          httpGet:
+            path: /health/liveness
+            port: 8097
+          initialDelaySeconds: 7
+          periodSeconds: 2

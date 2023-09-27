@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-deployment
+spec:
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+      - name: gateway
+        image: gateway:3.0.0
+        imagePullPolicy: Never
+        env:
+          - name: API_SERVICE_ROUTE
+            value: http://api-service.service.svc.cluster.local:8097
+        resources:
+          limits:
+            memory: "500M"
+            cpu: 1.5
+        ports:
+        - containerPort: 8080
+#        livenessProbe:
+#          httpGet:
+#            path: /health/liveness
+#            port: 8080
+#          initialDelaySeconds: 5
+#          periodSeconds: 1
+#        readinessProbe:
+#          httpGet:
+#            path: /health/readiness
+#            port: 8080
+#          initialDelaySeconds: 5
+#          periodSeconds: 1
