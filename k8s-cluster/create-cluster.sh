@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if ! command -v jq &> /dev/null
+then
+    echo "jq could not be found"
+    exit 1
+fi
+
 CLUSTER_NAME=$1
 
 kind create cluster --name $CLUSTER_NAME --config ./cluster.config
@@ -28,7 +34,7 @@ for i in "${ADDR[@]}"; do
     else
         IP_COMPOSITION="$IP_COMPOSITION.$i"
     fi
-    
+
     if [[ $count -eq 1 ]]
     then
         break
